@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Products</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="navbar">
+    <h2>View Products</h2>
+    <div class="nav-actions">
+      <button id="themeToggle">🌙</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="sidebar" id="sidebar">
+      <button id="toggleSidebar" class="toggle-btn">☰</button>
+      <a href="adminindex.html">🏠 Dashboard</a>
+      <a href="addproduct.html">➕ Add Product</a>
+      <a href="viewproduct.html" class="active">📦 View Products</a>
+      <a href="vieworders.html">🧾 View Orders</a>
+<a href="viewcustomers.html">👥 View Customers</a>
+    </div>
+
+    <div class="content">
+      <h3>All Products</h3>
+      <table id="productTable">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price (₹)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <script src="adminscript.js"></script>
+</body>
+</html>

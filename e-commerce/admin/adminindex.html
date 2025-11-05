@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="navbar">
+    <h2>Admin Dashboard</h2>
+    <div class="nav-actions">
+      <button id="themeToggle">🌙</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="sidebar" id="sidebar">
+      <button id="toggleSidebar" class="toggle-btn">☰</button>
+      <a href="#" onclick="showSection('dashboard')" class="active">🏠 Dashboard</a>
+      <a href="addproduct.html">➕ Add Product</a>
+      <a href="viewproduct.html">📦 View Products</a>
+      <a href="vieworders.html">🧾 View Orders</a>
+      <a href="viewcustomers.html" >👥 View Customers</a>
+    </div>
+
+    <!-- Main  -->
+    <div class="content">
+      <section id="dashboard">
+        <h3>Welcome, Admin!</h3>
+        <div class="cards">
+          <div class="card">Total Products<br><span id="totalProducts">--</span></div>
+          <div class="card">Total Orders<br><span id="totalOrders">--</span></div>
+          <div class="card">Total Customers<br><span id="totalCustomers">--</span></div>
+        </div>
+      </section>
+
+      <!-- Customers  -->
+      <section id="view-customers" style="display:none;">
+        <h2>Customer List</h2>
+        <table border="1" id="customerTable">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Password</th>
+            </tr>
+          </thead>
+          <tbody id="customerList">
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+
+  <!-- Load User  -->
+  <script>
+    window.onload = function() {
+      const user = localStorage.getItem("loggedInUser");
+      if (user) {
+        console.log(`Welcome, ${user}!`);
+      } else {
+        window.location.href = "index.html";
+      }
+    };
+  </script>
+
+  <!-- Fetch Dashboard Data -->
+  <script>
+    async function fetchDashboardData() {
+      try {
+        const response = await fetch("http://localhost:5000/api/dashboard/summary");
+        const data = await response.json();
+
+        document.getElementById("totalProducts").textContent = data.totalProducts ?? "--";
+        document.getElementById("totalOrders").textContent = data.totalOrders ?? "--";
+        document.getElementById("totalCustomers").textContent = data.totalCustomers ?? "--";
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    }
+    window.addEventListener("DOMContentLoaded", fetchDashboardData);
+  </script>
+
+  <!--Customer List -->
+  <script>
+    async function loadCustomers() {
+      try {
+        const response = await fetch("/api/customers");
+        const customers = await response.json();
+
+        const tableBody = document.getElementById("customerList");
+        tableBody.innerHTML = "";
+
+        customers.forEach((customer, index) => {
+          const row = `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${customer.name || "N/A"}</td>
+              <td>${customer.email || customer.name || "N/A"}</td>
+              <td>${customer.password || "N/A"}</td>
+            </tr>
+          `;
+          tableBody.innerHTML += row;
+        });
+      } catch (err) {
+        console.error("Error loading customers:", err);
+      }
+    }
+
+    function showSection(sectionId) {
+      document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
+      document.getElementById(sectionId).style.display = "block";
+      if (sectionId === "view-customers") {
+        loadCustomers();
+      }
+    }
+  </script>
+
+  <!--logout -->
+  <script>
+    document.getElementById("logoutBtn").addEventListener("click", function() {
+      const confirmLogout = confirm("Are you want to logout?");
+      if (confirmLogout) {
+        sessionStorage.removeItem("isLoggedIn");
+        localStorage.clear();
+        window.location.replace("index.html");
+      }
+    });
+  </script>
+
+  <!--theme-->
+  <script>
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-theme");
+themeToggle.textContent = document.body.classList.contains("dark-theme") ? "☀️" : "🌙";
+
+    });
+  </script>
+
+  <script>
+  // Sidebar 
+  const toggleSidebarBtn = document.getElementById("toggleSidebar");
+  const sidebar = document.getElementById("sidebar");
+  toggleSidebarBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+  });
+</script>
+</body>
+</html>

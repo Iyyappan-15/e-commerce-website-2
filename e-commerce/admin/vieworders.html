@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Orders</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body { display: flex; background-color: #f8f9fa; font-family: "Poppins", sans-serif; }
+    .sidebar { width: 250px; height: 100vh; background: #212529; color: white; position: fixed; padding-top: 30px; }
+    .sidebar a { display: block; color: #ccc; padding: 15px 25px; text-decoration: none; }
+    .sidebar a:hover, .sidebar a.active { background: #0d6efd; color: white; }
+    .main-content { margin-left: 250px; padding: 40px; width: 100%; }
+    table img { border-radius: 8px; object-fit: cover; }
+    .table-box { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h3 class="text-center mb-4">🛒 Admin Panel</h3>
+    <a href="adminindex.html">📊 Dashboard</a>
+    <a href="addproduct.html">➕ Add Product</a>
+    <a href="viewproduct.html">📦 View Products</a>
+    <a href="vieworders.html" class="active">🧾 View Orders</a>
+    <a href="viewcustomers.html">👥 View Customers</a>
+  </div>
+
+  <div class="main-content">
+    <div class="table-box">
+      <h3 class="text-center mb-4">All Orders</h3>
+      <table class="table table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTable"></tbody>
+      </table>
+    </div>
+  </div>
+  <script src="adminscript.js"></script>
+</body>
+</html>

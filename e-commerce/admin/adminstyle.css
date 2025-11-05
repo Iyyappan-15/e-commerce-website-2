@@ -1,0 +1,207 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f6f9;
+  margin: 0;
+  color: #333;
+}
+.navbar {
+  background: linear-gradient(90deg, #0d6efd, #004aad);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 30px;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.navbar h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.navbar button {
+  background-color: #ff4444;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.navbar button:hover {
+  background-color: #cc0000;
+}
+
+.container {
+  display: flex;
+  padding: 0;
+  min-height: calc(100vh - 60px);
+}
+
+.sidebar {
+  width: 230px;
+  background-color: #1a1a1a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding-top: 30px;
+  box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar a {
+  display: block;
+  color: #ccc;
+  padding: 12px 25px;
+  text-decoration: none;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.sidebar a:hover {
+  background-color: #0d6efd;
+  color: #fff;
+  padding-left: 35px;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  background-color: #f8f9fc;
+}
+
+.content h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  background: linear-gradient(135deg, #007BFF, #00C6FF);
+  color: white;
+  padding: 25px;
+  text-align: center;
+  border-radius: 12px;
+  font-size: 18px;
+  min-width: 220px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card span {
+  display: block;
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.admin-section {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin-top: 30px;
+}
+
+.admin-section h1 {
+  font-size: 22px;
+  color: #0d6efd;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#productForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+#productForm input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#productForm button {
+  background-color: #0d6efd;
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+#productForm button:hover {
+  background-color: #004aad;
+}
+
+#productTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#productTable th {
+  background-color: #0d6efd;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+#productTable td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+#productTable tr:hover {
+  background-color: #f9f9f9;
+}
+
+.edit-btn, .delete-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #fff;
+}
+
+.edit-btn {
+  background-color: #28a745;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+}
+
+.edit-btn:hover {
+  background-color: #218838;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}

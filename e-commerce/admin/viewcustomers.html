@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Customers</title>
+  <link rel="stylesheet" href="theme.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Table Style */
+    .content {
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    tr:hover {
+      background-color: var(--hover-bg);
+    }
+
+    .delete-btn {
+      background: crimson;
+      color: white;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background: darkred;
+    }
+
+    /* Light / Dark Mode */
+    :root {
+      --bg-color: #f9f9f9;
+      --text-color: #333;
+      --card-bg: #fff;
+      --border-color: #ddd;
+      --hover-bg: #f1f1f1;
+      --accent-color: #007BFF; /* 🔵 Blue for Light Mode */
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #eee;
+      --card-bg: #1f1f1f;
+      --border-color: #333;
+      --hover-bg: #2a2a2a;
+      --accent-color: #888; /* ⚙️ Grey for Dark Mode */
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: Arial, sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--accent-color);
+      color: white;
+      padding: 15px 20px;
+    }
+
+    .nav-actions button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .container {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: var(--card-bg);
+      border-right: 1px solid var(--border-color);
+      padding: 15px;
+      height: calc(100vh - 60px);
+      transition: width 0.3s;
+    }
+
+    .sidebar a {
+      display: block;
+      text-decoration: none;
+      color: var(--text-color);
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+
+    .sidebar a:hover {
+      background: var(--hover-bg);
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h2>Admin Dashboard</h2>
+    <div class="nav-actions">
+      <button id="themeToggle">🌙</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="sidebar" id="sidebar">
+      <button id="toggleSidebar" class="toggle-btn">☰</button>
+      <a href="adminindex.html">🏠 Dashboard</a>
+      <a href="addproduct.html">➕ Add Product</a>
+      <a href="viewproduct.html">📦 View Products</a>
+      <a href="vieworders.html">🧾 View Orders</a>
+      <a href="viewcustomers.html" class="active">👥 View Customers</a>
+    </div>
+
+    <!-- Main  -->
+    <div class="content">
+      <h3>👥 Customer List</h3>
+      <table id="customerTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Password</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="customerData">
+          <tr><td colspan="3">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Theme 
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      themeToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+    });
+    window.addEventListener("load", () => {
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+        themeToggle.textContent = "☀️";
+      }
+      fetchCustomers();
+    });
+
+    //  Sidebar
+    document.getElementById("toggleSidebar").addEventListener("click", () => {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.style.width = sidebar.style.width === "60px" ? "220px" : "60px";
+    });
+
+    // Fetch Customers from MongoDB
+    async function fetchCustomers() {
+      try {
+        const response = await fetch("http://localhost:5000/api/viewcustomers");
+        const data = await response.json();
+
+        const tableBody = document.getElementById("customerData");
+        tableBody.innerHTML = "";
+
+        if (data.length === 0) {
+          tableBody.innerHTML = "<tr><td colspan='3'>No customers found</td></tr>";
+          return;
+        }
+
+        data.forEach(user => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.password}</td>
+            <td><button class="delete-btn" onclick="deleteUser('${user._id}')">Remove</button></td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        document.getElementById("customerData").innerHTML =
+          "<tr><td colspan='3'>Failed to fetch data</td></tr>";
+      }
+    }
+
+    // Delete user
+    async function deleteUser(id) {
+      if (!confirm("Are you sure you want to remove this user?")) return;
+      try {
+        const response = await fetch(`http://localhost:5000/api/viewcustomers/${id}`, {
+          method: "DELETE",
+        });
+        if (response.ok) {
+          alert("User deleted successfully!");
+          fetchCustomers();
+        } else {
+          alert("Failed to delete user!");
+        }
+      } catch (error) {
+        console.error("Error deleting user:", error);
+      }
+    }
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      const confirmLogout = confirm("Are you  want to logout?");
+      if (confirmLogout) {
+        sessionStorage.removeItem("isLoggedIn");
+        localStorage.clear();
+        window.location.replace("index.html");
+      }
+    });
+  </script>
+</body>
+</html>

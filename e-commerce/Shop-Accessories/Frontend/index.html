@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sports Accessories - Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f8f8f8;
+      color: #222;
+    }
+
+    .navbar {
+      background-color: #0b4ea2;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .search-bar {
+      flex: 1;
+      margin: 0 20px;
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: none;
+      max-width: 400px;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      padding: 25px;
+    }
+
+    .product {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      padding: 12px;
+      transition: transform 0.2s;
+    }
+
+    .product:hover {
+      transform: translateY(-4px);
+    }
+
+    .product img {
+      width: 100%;
+      height: 140px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    .product h3 {
+      font-size: 16px;
+      margin: 10px 0 5px;
+    }
+
+    .product p {
+      font-weight: bold;
+      color: #333;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">Sports Accessories</div>
+    <input type="text" id="searchBar" placeholder="Search accessories..." class="search-bar" />
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="orders.html">My Orders</a>
+      <a href="cart.html">Cart</a>
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Product Grid -->
+  <section class="product-grid" id="productGrid">
+  </section>
+
+  <script>
+    async function loadProducts() {
+      try {
+        const res = await fetch('products.json');
+        const products = await res.json();
+
+        const container = document.getElementById('productGrid');
+        container.innerHTML = products.map(p => `
+  <a href="product.html?id=${p.id}" class="product">
+    <img src="${p.image}" alt="${p.name}" onerror="this.src='images/default.jpg'">
+    <h3>${p.name}</h3>
+    <p>₹${p.price}</p>
+  </a>
+`).join('');
+
+      } catch (error) {
+        console.error('Error loading products:', error);
+      }
+    }
+
+    // Search filter
+    document.getElementById('searchBar').addEventListener('input', e => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.product').forEach(item => {
+        const name = item.querySelector('h3').innerText.toLowerCase();
+        item.style.display = name.includes(query) ? '' : 'none';
+      });
+    });
+
+    loadProducts();
+  </script>
+</body>
+</html>
